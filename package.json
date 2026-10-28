@@ -1,0 +1,63 @@
+{
+  "name": "dsh-plugin-model-matrix",
+  "version": "1.0.0",
+  "description": "Unified model matrix & subscription manager for DeepSeek Harness: two-level composer selection (Provider + Model) with real-time status lights, plus Nous Portal, Opencode Zen and Command Code integration.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src",
+    "locale",
+    "scripts",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README.md",
+    "README.zh.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "model-selection",
+    "llm-provider",
+    "hermes",
+    "nous-portal",
+    "opencode-zen",
+    "command-code"
+  ],
+  "author": "ly1992921",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.0",
+    "@deepseek-ai/dsh-commands": "*",
+    "@deepseek-ai/dsh-credentials": "*",
+    "@deepseek-ai/dsh-home-paths": "*",
+    "@deepseek-ai/dsh-llm": "*",
+    "@deepseek-ai/dsh-settings": "*",
+    "@deepseek-ai/dsh-timeout": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-commands": { "optional": true },
+    "@deepseek-ai/dsh-credentials": { "optional": true }
+  }
+}
