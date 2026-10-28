@@ -53,6 +53,22 @@ Integrates management panels for:
 
 ---
 
+## 🧩 Dependency & Standalone Design
+
+### 1. Zero External Runtime Dependencies
+* Only depends on DeepSeek Harness's core platform APIs: `@deepseek-ai/cordis`, `slots`, `locale`, and `llm`.
+* **No third-party npm packages required**. Works out-of-the-box in both Electron desktop and Web browser environments.
+
+### 2. 100% Standalone for Core Capabilities
+* The two-level selector, interruption-free browsing, and single-model health checks work for **any provider** (official DeepSeek, enterprise gateways, or OpenAI-compatible proxies), even in a fresh DSH installation with no subscription plugins.
+
+### 3. Progressive Channel Integration
+Subscription channels use graceful degradation:
+* If the underlying inference provider is present, its specialized heartbeats and management panels activate automatically.
+* If a provider plugin is absent, the suite safely skips it without errors or disruption.
+
+---
+
 ## 📂 Directory Structure
 
 ```
