@@ -83,6 +83,12 @@
 > **设计哲学**：
 > 核心 UI 与控制逻辑完全自给自足；检测到环境中有对应订阅时自动激活增强逻辑；缺少某项时优雅降级静默，**绝对不会因为少装某个插件而导致整个界面崩溃或选择栏消失**。
 
+### 5. 🛡️ 客户端升级自愈与常驻守护（Auto-Healing Guardian）
+官方客户端（特别是处于 `nightly` 通道时）每次升级会全量覆盖 `resources/app.asar`，导致注入的 UI 补丁与扩展失效。本套件内置了**全自动自愈与守护体系**：
+- **版本变更与完整性感知**：自动监控官方核心文件时间戳及客户端版本演进。
+- **无损热补丁验证（Safe In-Place Byte-Aligned Patch）**：基于 AST 标记与精准字节对齐，安全执行零风险原位修补，自动生成备份文件 `app.asar.bak`。
+- **后台常驻守护（Guardian Daemon）**：开机自启并以极轻资源开销静默守候，一旦检测到客户端升级自动瞬间恢复，无需用户任何手动干预。
+
 ---
 
 ## 📂 项目结构
@@ -91,7 +97,7 @@
 dsh-plugin-model-matrix/
 ├── package.json               # 遵循 DSH Bundle 规范的元数据
 ├── cordis.patch.yml           # Cordis 加载层配置
-├── index.js                   # 宿主进程端入口（REST 路由、探针调度）
+├── index.js                   # 宿主进程端入口（REST 路由、探针调度、自愈检查）
 ├── client.js                  # 客户端/桌面端入口（双栏组件挂载、样式注入）
 ├── LICENSE                    # MIT 开源协议（署名 ly1992921）
 ├── README.md                  # 英文项目文档
@@ -114,6 +120,10 @@ dsh-plugin-model-matrix/
 │   ├── zh.json                # 中文多语言字典
 │   └── en.json                # 英文多语言字典
 └── scripts/
+    ├── self-healer.mjs        # 核心版本检测与无损热打补丁自愈引擎
+    ├── guardian.mjs           # 后台自动守护进程（毫秒级感知升级并自愈）
+    ├── launch-guardian.vbs    # Windows 无黑框静默启动器
+    ├── injected_model_select.js # 提取的独立无损选择器注入代码块
     ├── install.js             # 一键安装脚本
     └── test.js                # 自动化验证脚本
 ```

@@ -7,6 +7,7 @@ import { join } from 'node:path'
 import { createModelApi } from './src/core/api.js'
 import { probeModel } from './src/core/probe.js'
 import { ModelStore } from './src/core/store.js'
+import { autoHeal, inspectPluginStatus } from './scripts/self-healer.mjs'
 
 export const name = 'model-matrix'
 export const inject = ['llm']
@@ -15,6 +16,17 @@ const PKG = 'dsh-plugin-model-matrix'
 const NS = 'model-matrix'
 
 export function apply(ctx) {
+  // Automatic Self-Healing & Compatibility Guard upon DSH host plugin initialization
+  try {
+    const status = inspectPluginStatus()
+    if (status.asarStatus === 'UNPATCHED_COMPATIBLE' || !status.profileBundleRegistered || !status.junctionExists) {
+      console.log(`[${PKG}] Triggering self-healing for DSH ${status.appVersion}...`)
+      autoHeal({ verbose: true })
+    }
+  } catch (err) {
+    console.warn(`[${PKG}] Self-healing check error:`, err?.message || err)
+  }
+
   const dshHome = resolveDshHome?.() ?? join(process.env.HOME || process.env.USERPROFILE, '.dsh')
   const storeDir = join(dshHome, 'model-matrix')
   const store = new ModelStore(storeDir)
